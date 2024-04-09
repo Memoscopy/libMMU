@@ -23,4 +23,4 @@ todo
 
 ## Credits
 
-A huge part of this work is based on the thesis [In the Land of MMUs: Multiarchitecture OS-Agnostic Virtual Memory Forensics](https://www.s3.eurecom.fr/docs/tops22_oliveri.pdf) by Andrea Oliveri and Davide Balzarotti and their tool [mmushell](https://github.com/eurecom-s3/mmushell).
+A huge part of this work is based on the thesis [In the Land of MMUs: Multiarchitecture OS-Agnostic Virtual Memory Forensics](https://www.s3.eurecom.fr/docs/tops22_oliveri.pdf) by Andrea Oliveri and Davide Balzarotti and their POC [mmushell](https://github.com/eurecom-s3/mmushell).
