@@ -1,0 +1,18 @@
+[package]
+name = "libmmu"
+description = "Simplify the process of rebuilding virtual address spaces from a memory dump"
+
+version = "0.1.0"
+edition = "2021"
+
+readme = "README.md"
+homepage = "https://memoscopy.github.io/libMMU/"
+repository = "https://github.com/Memoscopy/libMMU/"
+
+keywords = ["forensics", "memory forensics"]
+exclude = [".github", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "assets"]
+license = "GPL-3.0"
+
+authors = ["Théo Abel <theo.abel53@gmail.com>"]
+
+[dependencies]
