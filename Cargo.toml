@@ -13,6 +13,6 @@ keywords = ["forensics", "memory forensics"]
 exclude = [".github", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "assets"]
 license = "GPL-3.0"
 
-authors = ["Théo Abel <theo.abel53@gmail.com>"]
+authors = ["Théo Abel <theo.abel53@gmail.com>"] # todo: add other contributors
 
 [dependencies]
