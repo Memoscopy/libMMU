@@ -4,11 +4,12 @@
 
 # User Guide
 
-todo
+- [Installation](guide/installation.md)
+- [Usage](guide/usage.md)
 
 # Reference Guide
 
-todo
+To be done
 
 -----------
 
