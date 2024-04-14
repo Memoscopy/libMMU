@@ -32,7 +32,7 @@ We love code quality and Rust has some excellent tools to assist you with contri
 #### Formatting Code with rustfmt
 
 Before you make your Pull Request to the project, please run it through the `rustfmt` utility.
-This will ensure we have good quality source code that is better for us all to maintain.
+This will ensure we have good quality source code that is better for us all to maintain, following the [Rust Style Guide](https://doc.rust-lang.org/beta/style-guide/index.html).
 
 [rustfmt](https://github.com/rust-lang/rustfmt) has a lot more information on the project.
 The quick guide is
@@ -91,7 +91,18 @@ Please consider the following when making a change:
 When you feel comfortable that your changes could be integrated into libMMU, you can create a pull-request on GitHub.
 One of the core maintainers will then approve the changes or request some changes before it gets merged.
 
-That's it, happy contributions! :tada: :tada: :tada:
+### Git usage
+
+We use the [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.0/) specification to format our commits, pull requests and branches. This allows us to keep a good project history and simplify the making of changelogs.
+
+That means that for our workflow, we use the following branch names :
+- hotfix : `hotfix/<hotfix name>`
+- feature : `feat/<feature name>`
+- documentation : `doc/<documentation changed>`
+- develop : `dev/v<version number>`
+- ...
+  
+![Git workflow](https://miro.medium.com/v2/resize:fit:1100/format:webp/1*tnvRls6Dg7vFt0zGdtfu_w.png "Git workflow")
 
 ## Publishing new releases
 
