@@ -18,7 +18,7 @@ edition = "2021"
 mathjax-support = true
 site-url = "/docs/"
 git-repository-url = "https://github.com/Memoscopy/libMMU/tree/main/docs"
-edit-url-template = "https://github.com/Memoscopy/libMMU/edit/main/guide/{path}"
+edit-url-template = "https://github.com/Memoscopy/libMMU/edit/main/docs/{path}"
 
 [output.html.playground]
 editable = true
