@@ -21,6 +21,49 @@ todo
 
 todo
 
+## Roadmap
+
+**v0.1.0**
+
+- [ ] Basic generic structures (CPU, MMU modes, Page Table Entries, ...)
+- [ ] Basic generic methods (extract bit(s), check flags on PDE/PTE/Pages )
+- [ ] Basic architectures constraints, e.g: cannot create a IA32 configuration with 64 bits
+- [ ] Loading base configuration from differents formats : TOML, YAML or from an in-line Rust [builder pattern](https://rust-unofficial.github.io/patterns/patterns/creational/builder.html)
+
+**v0.2.0**
+
+- [ ] Implement RISC-V architecture and its associated MMU modes, basic invariants
+- [ ] Implement structural signatures
+- [ ] Implement validation rules
+
+**v0.3.0**
+
+- [ ] Refactor the code to be asynchronous and threaded
+
+**Planned features**
+
+- Allow users to write their own validation rules with either a custom made grammar DSL or traits implementations
+- Add support for Binary Code Analysis with `miasm`
+
+```rust
+use libmmu::architectures::{ RiscV, RiscVMMUMode };
+use libmmu::utils::{ MemorySpace, SpaceType, MachineConfig };
+
+fn main() {
+    let memspaces = MemorySpace::new()
+        .add(SpaceType::RAM, 0x0000000080000000, 0x000000017fffffff)
+        .add(SpaceType::ROM, 0x0000000000000000, 0x0000000000011fff);
+
+    let conf = MachineConfig::<RiscV>::new()
+        .dumpfile("dump.raw")
+        .mmu(RiscVMMUMode::SV39)
+        .memspaces(memspaces)
+        .outfile("output");
+
+    conf.resolve_spaces()
+}
+```
+
 ## Credits
 
 A huge part of this work is based on the thesis [In the Land of MMUs: Multiarchitecture OS-Agnostic Virtual Memory Forensics](https://www.s3.eurecom.fr/docs/tops22_oliveri.pdf) by Andrea Oliveri and Davide Balzarotti and their POC [mmushell](https://github.com/eurecom-s3/mmushell).
