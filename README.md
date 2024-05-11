@@ -42,6 +42,7 @@ todo
 
 **Planned features**
 
+- Add support for other achitectures (ARM, X86, ...)
 - Allow users to write their own validation rules with either a custom made grammar DSL or traits implementations
 - Add support for Binary Code Analysis with `miasm`
 
