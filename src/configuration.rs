@@ -90,51 +90,51 @@ fn load_config(file_path: &str) -> Result<MachineConfig, Box<dyn Error>> {
 /// 
 /// Example:
 /// - This example loads a configuration from a JSON file and demonstrates how to manually convert the `mmu_mode`.
-fn main() -> Result<(), Box<dyn Error>> {
+/// fn main() -> Result<(), Box<dyn Error>> {
     // Collect command line arguments
-    let args: Vec<String> = env::args().collect();
+///    let args: Vec<String> = env::args().collect();
     // Check if a file path is provided
-    if args.len() < 2 {
-        eprintln!("Usage: {} <path_to_config_file>", args[0]);
-        std::process::exit(1);
-    }
+///    if args.len() < 2 {
+///        eprintln!("Usage: {} <path_to_config_file>", args[0]);
+///        std::process::exit(1);
+///    }
     // The file path is the second argument
-    let config_path = &args[1];
+///    let config_path = &args[1];
     // Output the path for debugging purposes
-    println!("Loading configuration from: {}", config_path);
+///    println!("Loading configuration from: {}", config_path);
     // Attempt to load the configuration
-    let file_conf = load_config(config_path)?;
+///    let file_conf = load_config(config_path)?;
     // Output the loaded configuration for verification
-    println!("Loaded Configuration: {:#?}", file_conf);
-
-    let mmu_mode: Option<RiscVMMUMode> = match file_conf.mmu_mode {
-        Some(ref mode) => match mode.as_str() {
-            "SV39" => Some(RiscVMMUMode::SV39),
-            "SV48" => Some(RiscVMMUMode::SV48),
-            _ => None,
-        },
-        None => None,
-    };
-    let inline_conf = MachineConfig {
-        mmu_mode: Some("SV39".to_string()),
-        memspaces: vec![
-            MemorySpace {
-                space_type: SpaceType::RAM,
-                start_address: 0x0000000080000000,
-                end_address: 0x000000017fffffff,
-            },
-            MemorySpace {
-                space_type: SpaceType::ROM,
-                start_address: 0x0000000000000000,
-                end_address: 0x0000000000011fff,
-            },
-        ],
-        dumpfile: Some("dump.raw".to_string()),
-        outfile: Some("output.txt".to_string()),
-    };
+///    println!("Loaded Configuration: {:#?}", file_conf);
+///
+///    let mmu_mode: Option<RiscVMMUMode> = match file_conf.mmu_mode {
+///        Some(ref mode) => match mode.as_str() {
+///            "SV39" => Some(RiscVMMUMode::SV39),
+///            "SV48" => Some(RiscVMMUMode::SV48),
+///            _ => None,
+///        },
+///        None => None,
+///    };
+///    let inline_conf = MachineConfig {
+///        mmu_mode: Some("SV39".to_string()),
+///        memspaces: vec![
+///            MemorySpace {
+///                space_type: SpaceType::RAM,
+///                start_address: 0x0000000080000000,
+///                end_address: 0x000000017fffffff,
+///            },
+///            MemorySpace {
+///                space_type: SpaceType::ROM,
+///                start_address: 0x0000000000000000,
+///                end_address: 0x0000000000011fff,
+///            },
+///        ],
+///        dumpfile: Some("dump.raw".to_string()),
+///        outfile: Some("output.txt".to_string()),
+///    };
     // Output the loaded configuration and the manually converted MMU mode.
-    println!("File-based Configuration: {:#?}", file_conf);
-    println!("MMU Mode: {:?}", mmu_mode);
-    println!("Inline Configuration: {:#?}", inline_conf);
-    Ok(())
-}
+///    println!("File-based Configuration: {:#?}", file_conf);
+///    println!("MMU Mode: {:?}", mmu_mode);
+///    println!("Inline Configuration: {:#?}", inline_conf);
+///    Ok(())
+/// }
