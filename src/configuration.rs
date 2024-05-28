@@ -74,23 +74,21 @@ enum RiscVMMUMode {
 /// let config = load_config("config.json").unwrap();
 /// println!("{:?}", config);
 /// ```
-fn load_config(file_path: &str) -> Result<MachineConfig, Box<dyn Error>> {
-    let config_str = fs::read_to_string(file_path)?;
-    let config: MachineConfig = match file_path.rsplit('.').next().ok_or("No file extension found")? {
-        "json" => serde_json::from_str(&config_str)?,
-        "yaml" => serde_yaml::from_str(&config_str)?,
-        "toml" => toml::from_str(&config_str)?,
-        "xml" => serde_xml_rs::from_str(&config_str)?,
-        _ => return Err("Unsupported file format".into()),
+fn load_config(file_path: &str) -> Result<MachineConfig, anyhow::Error> {
+    let config_str = fs::read_to_string(file_path)
+        .with_context(|| format!("Failed to read configuration file: {}", file_path))?;
+    let config: MachineConfig = match file_path.rsplit('.').next().context("No file extension found")? {
+        "toml" => toml::from_str(&config_str)
+            .with_context(|| format!("Failed to parse TOML configuration file: {}", file_path))?,
+        _ => return Err(anyhow::Error::msg(format!("Unsupported file format: {}", file_path))),
     };
     Ok(config)
 }
-
 /// Main function demonstrating configuration loading and usage.
 /// 
 /// Example:
 /// - This example loads a configuration from a JSON file and demonstrates how to manually convert the `mmu_mode`.
-/// fn main() -> Result<(), Box<dyn Error>> {
+/// fn main() -> Result<(), anyhow::Error> {
     // Collect command line arguments
 ///    let args: Vec<String> = env::args().collect();
     // Check if a file path is provided
