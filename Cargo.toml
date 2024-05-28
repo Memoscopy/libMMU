@@ -13,7 +13,7 @@ keywords = ["forensics", "memory forensics"]
 exclude = [".github", "CONTRIBUTING.md", "CODE_OF_CONDUCT.md", "assets"]
 license = "GPL-3.0"
 
-authors = ["Théo Abel <theo.abel53@gmail.com>"] # todo: add other contributors
+authors = ["Théo Abel <theo.abel53@gmail.com>"], ["Nathan Dandrimont <nathan.dandrimont@ecole2600.com>"] # todo: add other contributors
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
@@ -21,3 +21,4 @@ serde_yaml = "0.9.34"
 toml = "0.8.12"
 serde_json = "1.0"
 serde-xml-rs = "0.6"
+anyhow = "1.0"
