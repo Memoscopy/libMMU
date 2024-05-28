@@ -67,11 +67,11 @@ enum RiscVMMUMode {
 ///
 /// Technical Explanation:
 /// - The function determines the file format based on the extension and uses the appropriate Serde deserializer.
-/// - It handles JSON, YAML, TOML, and XML formats.
+/// - It handles TOML format.
 ///
 /// Example:
 /// ```rust
-/// let config = load_config("config.json").unwrap();
+/// let config = load_config("config.toml").unwrap();
 /// println!("{:?}", config);
 /// ```
 fn load_config(file_path: &str) -> Result<MachineConfig, anyhow::Error> {
