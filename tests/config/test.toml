@@ -1,0 +1,14 @@
+mmu_mode = "SV39"
+
+[[memspaces]]
+space_type = "RAM"
+start_address = 34359738368
+end_address = 103079215103
+
+[[memspaces]]
+space_type = "ROM"
+start_address = 0
+end_address = 73727
+
+dumpfile = "example_dump.raw"
+outfile = "example_output.txt"
