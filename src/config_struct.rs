@@ -19,7 +19,7 @@ use serde::{Serialize, Deserialize};
 /// - The `mmu_mode` is stored as a string to allow flexibility in how it is represented and used in different contexts.
 /// - `memspaces` is a vector of `MemorySpace`, which details the type and address range of memory spaces.
 /// 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Debug, Deserialize, Clone, Copy, Default)]
 pub struct MachineConfig {
     pub mmu_mode: Option<String>,
     pub memspaces: Vec<MemorySpace>,
@@ -28,7 +28,7 @@ pub struct MachineConfig {
 }
 
 /// Defines a memory space with a type and address range.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default)]
 pub struct MemorySpace {
     pub space_type: SpaceType,
     pub start_address: u64,
@@ -36,14 +36,14 @@ pub struct MemorySpace {
 }
 
 /// Enumerates types of memory spaces.
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default)]
 pub enum SpaceType {
     RAM,
     ROM,
 }
 
 /// Enumerates RISC-V MMU modes.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default)]
 pub enum RiscVMMUMode {
     SV39,
     SV48,
