@@ -77,7 +77,7 @@ impl PageTableEntry for RiscVPageTableEntry {
 /// Enumerates RISC-V MMU modes.
 /// The MMU modes are used to determine the number of bits used for virtual and physical addresses.
 /// The modes are named after the number of bits used for the virtual address space.
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Hash, Eq, PartialEq)]
 pub enum RiscVMMUMode {
     SV32,
     SV39,
