@@ -39,7 +39,7 @@ pub struct MemoryRegion {
 pub trait CPURegister {
     type Value: hash::Hash + Eq + Copy + Default;
 
-    fn is_valid() -> Result<Self::Value>;
+    fn is_valid(&self) -> Result<Self::Value>;
 }
 
 /// Represents a page table entry with an address and flags.
@@ -50,12 +50,12 @@ pub trait PageTableEntry {
     type Address: hash::Hash + Eq + Copy + Default;
     type Flags: hash::Hash + Eq + Copy + Default;
 
-    fn is_dirty() -> bool;
-    fn is_accessed() -> bool;
-    fn is_global() -> bool;
-    fn is_readable() -> bool;
-    fn is_writable() -> bool;
-    fn is_executable() -> bool;
+    fn is_dirty(&self) -> bool;
+    fn is_accessed(&self) -> bool;
+    fn is_global(&self) -> bool;
+    fn is_readable(&self) -> bool;
+    fn is_writable(&self) -> bool;
+    fn is_executable(&self) -> bool;
 }
 
 /// Represents a page table with entries.
