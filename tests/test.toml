@@ -2,8 +2,8 @@ mmu_mode = "SV39"
 
 [[memspaces]]
 space_type = "RAM"
-start_address = 34359738368
-end_address = 103079215103
+start_address = 0x12345678
+end_address = 0x87654321
 
 [[memspaces]]
 space_type = "ROM"
