@@ -1,6 +1,6 @@
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
-use std::hash;
+use std::{hash, path::PathBuf};
 
 // MemoryRegion
 // CPU
@@ -66,4 +66,25 @@ pub trait PageTable {
     type Entries: hash::Hash + Eq + Copy + Default + PageTableEntry;
 
     // fn apply_on_entries(function: FnMut(PageTableEntry) -> Vec<?> ) -> ? // to be defined
+}
+
+pub trait CPU {}
+
+pub trait MMU {}
+
+/// Enumerates types of supported machines.
+/// This enum is used to specify the type of machine that is being parsed.
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum MachineType {
+    RiscV,
+}
+
+/// Represents a machine with a type, MMU, CPU, memory regions, and an associated dump file.
+/// It is used to store the machine's configuration, memory regions, and the dump file that is being used.
+pub struct Machine {
+    pub _type: MachineType,
+    pub mmu: Box<dyn MMU>,
+    pub cpu: Box<dyn CPU>,
+    pub memory_regions: Vec<MemoryRegion>,
+    pub dumpfile: Option<PathBuf>,
 }
