@@ -13,8 +13,7 @@ impl CPURegisterTrait for CPURegister {
     type Value = u64;
 
     fn is_valid(&self) -> Result<u64> {
-        // FIXME: Implement validation logic
-        Ok(self.value)
+        todo!()
     }
 }
 
@@ -40,7 +39,7 @@ impl PageTableEntry {
     }
 
     pub fn is_supervisor(&self) -> bool {
-        true // FIXME: Implement validation logic
+        todo!()
     }
 }
 
@@ -50,27 +49,27 @@ impl PageTableEntryTrait for PageTableEntry {
 
     // FIXME: Implement the following methods
     fn is_dirty(&self) -> bool {
-        true
+        todo!()
     }
 
     fn is_accessed(&self) -> bool {
-        true
+        todo!()
     }
 
     fn is_global(&self) -> bool {
-        true
+        todo!()
     }
 
     fn is_readable(&self) -> bool {
-        true
+        todo!()
     }
 
     fn is_writable(&self) -> bool {
-        true
+        todo!()
     }
 
     fn is_executable(&self) -> bool {
-        true
+        todo!()
     }
 }
 
