@@ -1,4 +1,4 @@
-use super::generic::{CPURegister, PageTableEntry};
+use super::generic::{CPURegister, PageTableEntry, CPU, MMU};
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
@@ -77,9 +77,40 @@ impl PageTableEntry for RiscVPageTableEntry {
 /// Enumerates RISC-V MMU modes.
 /// The MMU modes are used to determine the number of bits used for virtual and physical addresses.
 /// The modes are named after the number of bits used for the virtual address space.
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Hash, Eq, PartialEq)]
+#[derive(Debug, Clone, Copy, Serialize, Deserialize, Hash, Eq, PartialEq, Default)]
 pub enum RiscVMMUMode {
+    #[default]
     SV32,
     SV39,
     SV48,
 }
+
+/// Represents a RISC-V CPU.
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq)]
+pub struct RiscVCPU {
+    pub registers: Vec<RiscVCPURegister>,
+}
+
+impl RiscVCPU {
+    pub fn new() -> Self {
+        Self {
+            registers: Vec::new(),
+        }
+    }
+}
+
+impl CPU for RiscVCPU {}
+
+/// Represents a RISC-V MMU.
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq)]
+pub struct RiscVMMU {
+    pub mode: RiscVMMUMode,
+}
+
+impl RiscVMMU {
+    pub fn new(mode: RiscVMMUMode) -> Self {
+        Self { mode }
+    }
+}
+
+impl MMU for RiscVMMU {}
