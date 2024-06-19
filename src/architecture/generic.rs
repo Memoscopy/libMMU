@@ -70,14 +70,16 @@ impl MemoryRegion {
 }
 
 /// Represents a memory space with regions.
-#[derive(Serialize, Deserialize, Debug, Clone, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct MemorySpace {
     pub regions: Vec<MemoryRegion>,
 }
 
 impl MemorySpace {
-    pub fn new(regions: Vec<MemoryRegion>) -> Self {
-        Self { regions }
+    pub fn new() -> Self {
+        Self {
+            regions: Vec::new(),
+        }
     }
 
     pub fn add(&mut self, region: MemoryRegion) -> Result<&mut Self> {
@@ -143,24 +145,24 @@ pub enum MachineType {
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Hash)]
 pub struct Machine<T: CPU, U: MMU> {
     pub _type: MachineType,
-    pub mmu: T,
-    pub cpu: U,
-    pub memory_regions: Vec<MemoryRegion>,
+    pub cpu: T,
+    pub mmu: U,
+    pub memory_regions: MemorySpace,
     pub dumpfile: PathBuf,
 }
 
 impl<T: CPU, U: MMU> Machine<T, U> {
     pub fn new(
         _type: MachineType,
-        mmu: T,
-        cpu: U,
-        memory_regions: Vec<MemoryRegion>,
+        cpu: T,
+        mmu: U,
+        memory_regions: MemorySpace,
         dumpfile: PathBuf,
     ) -> Self {
         Self {
             _type,
-            mmu,
             cpu,
+            mmu,
             memory_regions,
             dumpfile,
         }
