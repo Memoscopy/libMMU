@@ -65,7 +65,7 @@ fn main() -> Result<()> {
         outfolder
     )?;
 
-    conf.resolve_spaces()?;
+    machine.resolve_spaces()?;
 }
 ```
 
