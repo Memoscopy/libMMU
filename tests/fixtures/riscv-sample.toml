@@ -1,14 +1,15 @@
-mmu_mode = "SV39"
+dumpfile = "tests/fixtures/riscv-sv32.dump"
+outfolder = "tests/output"
 
-[[memspaces]]
-space_type = "RAM"         # test RAM
+[machine_type]
+RiscV = "SV32"
+
+[[memory_regions.regions]]
+region_type = "RAM"        # test RAM
 start_address = 0x12345678 # test hex numbers
 end_address = 0x87654321
 
-[[memspaces]]
-space_type = "ROM"  # test ROM
+[[memory_regions.regions]]
+region_type = "ROM"
 start_address = 0
-end_address = 73727 # test decimal numbers
-
-
-dumpfile = "riscv-sv39.raw"
+end_address = 73727

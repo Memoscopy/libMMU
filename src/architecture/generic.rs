@@ -2,16 +2,7 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use std::{hash, path::PathBuf};
 
-// MemoryRegion
-// CPU
-// CPURegister
-// PageTableEntry
-// PageTable
-// RadixTree
-// VirtualAddressSpace
-// PhysicalAddressSpace
-// MMU
-// Machine
+use super::riscv::MMUMode as RiscVMMUMode;
 
 /// Enumerates types of memory regions.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
@@ -22,15 +13,19 @@ pub enum MemoryRegionType {
 }
 
 /// Represents a memory region with a start and end address.
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, Default, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub struct MemoryRegion {
-    pub _type: MemoryRegionType,
+    pub region_type: MemoryRegionType,
     pub start_address: u64,
     pub end_address: u64,
 }
 
 impl MemoryRegion {
-    pub fn new(_type: MemoryRegionType, start_address: u64, end_address: u64) -> Result<Self> {
+    pub fn new(
+        region_type: MemoryRegionType,
+        start_address: u64,
+        end_address: u64,
+    ) -> Result<Self> {
         // Check that addresses are valid memory addresses
         if start_address >= end_address {
             return Err(anyhow::anyhow!(
@@ -39,7 +34,7 @@ impl MemoryRegion {
         }
 
         Ok(Self {
-            _type,
+            region_type,
             start_address,
             end_address,
         })
@@ -70,7 +65,7 @@ impl MemoryRegion {
 }
 
 /// Represents a memory space with regions.
-#[derive(Serialize, Deserialize, Debug, Clone, Default, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default)]
 pub struct MemorySpace {
     pub regions: Vec<MemoryRegion>,
 }
@@ -129,42 +124,47 @@ pub trait PageTable {
     // fn apply_on_entries(function: FnMut(PageTableEntry) -> Vec<?> ) -> ? // FIXME: to be defined, but is it necessary?
 }
 
-pub trait CPU {}
-
-pub trait MMU {}
-
 /// Enumerates types of supported machines.
 /// This enum is used to specify the type of machine that is being parsed.
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum MachineType {
-    RiscV,
+    RiscV(RiscVMMUMode),
+}
+
+impl Default for MachineType {
+    fn default() -> Self {
+        Self::RiscV(RiscVMMUMode::SV32)
+    }
 }
 
 /// Represents a machine with a type, MMU, CPU, memory regions, and an associated dump file.
 /// It is used to store the machine's configuration, memory regions, and the dump file that is being used.
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq, Eq, Hash)]
-pub struct Machine<T: CPU, U: MMU> {
-    pub _type: MachineType,
-    pub cpu: T,
-    pub mmu: U,
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default)]
+pub struct Machine {
+    /// Type of the machine and its associated MMU mode.
+    pub machine_type: MachineType,
+    /// Memory regions of the machine.
     pub memory_regions: MemorySpace,
+    /// Path to the dump file.
     pub dumpfile: PathBuf,
+    /// Path to the output folder.
+    pub outfolder: PathBuf,
 }
 
-impl<T: CPU, U: MMU> Machine<T, U> {
+impl Machine {
     pub fn new(
-        _type: MachineType,
-        cpu: T,
-        mmu: U,
+        machine_type: MachineType,
         memory_regions: MemorySpace,
         dumpfile: PathBuf,
+        outfolder: PathBuf,
     ) -> Self {
+        // TODO: Validate each field
+
         Self {
-            _type,
-            cpu,
-            mmu,
+            machine_type,
             memory_regions,
             dumpfile,
+            outfolder,
         }
     }
 }

@@ -1,15 +1,15 @@
-use super::generic::{CPURegister, PageTableEntry, CPU, MMU};
+use super::generic::{CPURegister as CPURegisterTrait, PageTableEntry as PageTableEntryTrait};
 
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 /// Represents a RISC-V CPU register associated with a value.
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, Default, Hash, Eq, PartialEq)]
-pub struct RiscVCPURegister {
+pub struct CPURegister {
     pub value: u64,
 }
 
-impl CPURegister for RiscVCPURegister {
+impl CPURegisterTrait for CPURegister {
     type Value = u64;
 
     fn is_valid(&self) -> Result<u64> {
@@ -18,7 +18,7 @@ impl CPURegister for RiscVCPURegister {
     }
 }
 
-impl RiscVCPURegister {
+impl CPURegister {
     pub fn new(value: u64) -> Self {
         Self { value }
     }
@@ -29,12 +29,12 @@ impl RiscVCPURegister {
 /// There is also auxiliary information about the page such as a present bit, a dirty or modified bit,
 /// address space or process ID information, amongst others.
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, Hash, Eq, PartialEq)]
-pub struct RiscVPageTableEntry {
+pub struct PageTableEntry {
     pub address: u64,
     pub flags: u64,
 }
 
-impl RiscVPageTableEntry {
+impl PageTableEntry {
     pub fn new(address: u64, flags: u64) -> Self {
         Self { address, flags }
     }
@@ -44,7 +44,7 @@ impl RiscVPageTableEntry {
     }
 }
 
-impl PageTableEntry for RiscVPageTableEntry {
+impl PageTableEntryTrait for PageTableEntry {
     type Address = u64;
     type Flags = u64;
 
@@ -78,7 +78,7 @@ impl PageTableEntry for RiscVPageTableEntry {
 /// The MMU modes are used to determine the number of bits used for virtual and physical addresses.
 /// The modes are named after the number of bits used for the virtual address space.
 #[derive(Debug, Clone, Copy, Serialize, Deserialize, Hash, Eq, PartialEq, Default)]
-pub enum RiscVMMUMode {
+pub enum MMUMode {
     #[default]
     SV32,
     SV39,
@@ -87,11 +87,11 @@ pub enum RiscVMMUMode {
 
 /// Represents a RISC-V CPU.
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq)]
-pub struct RiscVCPU {
-    pub registers: Vec<RiscVCPURegister>,
+pub struct CPU {
+    pub registers: Vec<CPURegister>,
 }
 
-impl RiscVCPU {
+impl CPU {
     pub fn new() -> Self {
         Self {
             registers: Vec::new(),
@@ -99,18 +99,14 @@ impl RiscVCPU {
     }
 }
 
-impl CPU for RiscVCPU {}
-
 /// Represents a RISC-V MMU.
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq)]
-pub struct RiscVMMU {
-    pub mode: RiscVMMUMode,
+pub struct MMU {
+    pub mode: MMUMode,
 }
 
-impl RiscVMMU {
-    pub fn new(mode: RiscVMMUMode) -> Self {
+impl MMU {
+    pub fn new(mode: MMUMode) -> Self {
         Self { mode }
     }
 }
-
-impl MMU for RiscVMMU {}
