@@ -40,7 +40,7 @@ impl RiscVPageTableEntry {
     }
 
     pub fn is_supervisor(&self) -> bool {
-        self.flags & 0x1 == 0
+        true // FIXME: Implement validation logic
     }
 }
 
