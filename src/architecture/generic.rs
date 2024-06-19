@@ -14,16 +14,11 @@ use std::{hash, path::PathBuf};
 // Machine
 
 /// Enumerates types of memory regions.
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
 pub enum MemoryRegionType {
+    #[default]
     RAM,
     ROM,
-}
-
-impl Default for MemoryRegionType {
-    fn default() -> Self {
-        MemoryRegionType::RAM
-    }
 }
 
 /// Represents a memory region with a start and end address.
@@ -40,12 +35,6 @@ impl MemoryRegion {
         if start_address >= end_address {
             return Err(anyhow::anyhow!(
                 "Invalid memory region, start address is greater than or equal to end address"
-            ));
-        }
-
-        if start_address >= u64::MAX || end_address >= u64::MAX {
-            return Err(anyhow::anyhow!(
-                "Invalid memory address, address is greater than u64::MAX"
             ));
         }
 
