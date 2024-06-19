@@ -1,0 +1,15 @@
+dumpfile = "tests/fixtures/riscv-sv32.dump"
+outfolder = "tests/output"
+
+[machine_type]
+RiscV = "SV32"
+
+[[memory_regions.regions]]
+region_type = "RAM"        # test RAM
+start_address = 0x12345678 # test hex numbers
+end_address = 0x87654321
+
+[[memory_regions.regions]]
+region_type = "ROM"
+start_address = 0
+end_address = 73727

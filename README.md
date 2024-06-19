@@ -46,21 +46,26 @@ todo
 - Add support for Binary Code Analysis with `miasm`
 
 ```rust
+use anyhow::Result;
 use libmmu::architectures::{ RiscV, RiscVMMUMode };
 use libmmu::utils::{ MemorySpace, SpaceType, MachineConfig };
 
-fn main() {
+fn main() -> Result<()> {
+    let dumpfile = ...;
+    let outfolder = ...;
+
     let memspaces = MemorySpace::new()
         .add(SpaceType::RAM, 0x0000000080000000, 0x000000017fffffff)
         .add(SpaceType::ROM, 0x0000000000000000, 0x0000000000011fff);
 
-    let conf = MachineConfig::<RiscV>::new()
-        .dumpfile("dump.raw")
-        .mmu(RiscVMMUMode::SV39)
-        .memspaces(memspaces)
-        .outfile("output");
+    let machine = Machine::new(
+        MachineType::RiscV(MMUMode:SV32),
+        memspaces,
+        dumpfile,
+        outfolder
+    )?;
 
-    conf.resolve_spaces()
+    machine.resolve_spaces()?;
 }
 ```
 
