@@ -158,8 +158,28 @@ impl Machine {
         dumpfile: PathBuf,
         outfolder: PathBuf,
     ) -> Self {
-        // TODO: Validate each field
-
+        //Check if machine_type is valid
+        if !matches!(machine_type, MachineType::RiscV(_)) {
+            panic!("Machine type is not supported");
+        }
+        // Check if the dump file exists
+        if !dumpfile.exists() {
+            panic!("Dump file does not exist");
+        }
+        // Check if the output folder exists
+        if !outfolder.exists() {
+            panic!("Output folder does not exist");
+        }
+        // Check if the output folder is empty
+        if outfolder.read_dir().unwrap().next().is_some() {
+            panic!("Output folder is not empty");
+        }
+        // Check if the memory regions are valid
+        for region in &memory_regions.regions {
+            if region.start_address > region.end_address {
+                panic!("Memory region start address is greater than end address");
+            }
+        }
         Self {
             machine_type,
             memory_regions,
