@@ -28,7 +28,7 @@ todo
 - [ ] Basic generic structures (CPU, MMU modes, Page Table Entries, ...)
 - [ ] Basic generic methods (extract bit(s), check flags on PDE/PTE/Pages )
 - [ ] Basic architectures constraints, e.g: cannot create a IA32 configuration with 64 bits
-- [ ] Loading base configuration from differents formats : TOML, YAML or from an in-line Rust [builder pattern](https://rust-unofficial.github.io/patterns/patterns/creational/builder.html)
+- [x] Loading base configuration from differents formats : TOML, YAML or from an in-line Rust [builder pattern](https://rust-unofficial.github.io/patterns/patterns/creational/builder.html)
 
 **v0.2.0**
 
