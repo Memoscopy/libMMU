@@ -5,7 +5,7 @@ use std::{hash, path::PathBuf};
 use super::riscv::MMUMode as RiscVMMUMode;
 
 /// Enumerates types of memory regions.
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Ord, PartialOrd, Hash, Default)]
 pub enum MemoryRegionType {
     #[default]
     RAM,
@@ -13,7 +13,7 @@ pub enum MemoryRegionType {
 }
 
 /// Represents a memory region with a start and end address.
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Ord, PartialOrd, Hash, Default)]
 pub struct MemoryRegion {
     pub region_type: MemoryRegionType,
     pub start_address: u64,
@@ -65,7 +65,7 @@ impl MemoryRegion {
 }
 
 /// Represents a memory space with regions.
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Ord, PartialOrd, Hash, Default)]
 pub struct MemorySpace {
     pub regions: Vec<MemoryRegion>,
 }
@@ -93,7 +93,7 @@ impl MemorySpace {
 /// Represents a CPU register with a value.
 /// Depending on the architecture, the *validity* changes.
 pub trait CPURegister {
-    type Value: hash::Hash + Eq + Copy + Default;
+    type Value: hash::Hash + Eq + Default;
 
     fn is_valid(&self) -> Result<Self::Value>;
 }
@@ -103,8 +103,8 @@ pub trait CPURegister {
 /// There is also auxiliary information about the page such as a present bit, a dirty or modified bit,
 /// address space or process ID information, amongst others.
 pub trait PageTableEntry {
-    type Address: hash::Hash + Eq + Copy + Default;
-    type Flags: hash::Hash + Eq + Copy + Default;
+    type Address: hash::Hash + Eq + Default;
+    type Flags: hash::Hash + Eq + Default;
 
     fn is_dirty(&self) -> bool;
     fn is_accessed(&self) -> bool;
@@ -119,14 +119,14 @@ pub trait PageTableEntry {
 /// It is used to translate virtual addresses to physical addresses and to manage the memory permissions of the pages.
 /// It is also used to store additional information about the pages, such as the status of the page, the address space or process ID, amongst others.
 pub trait PageTable {
-    type Entries: hash::Hash + Eq + Copy + Default + PageTableEntry;
+    type Entries: hash::Hash + Eq + Default + PageTableEntry;
 
     // fn apply_on_entries(function: FnMut(PageTableEntry) -> Vec<?> ) -> ? // FIXME: to be defined, but is it necessary?
 }
 
 /// Enumerates types of supported machines.
 /// This enum is used to specify the type of machine that is being parsed.
-#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Ord, PartialOrd, Hash)]
 pub enum MachineType {
     RiscV(RiscVMMUMode),
 }
@@ -139,7 +139,7 @@ impl Default for MachineType {
 
 /// Represents a machine with a type, MMU, CPU, memory regions, and an associated dump file.
 /// It is used to store the machine's configuration, memory regions, and the dump file that is being used.
-#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Hash, Default)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Ord, PartialOrd, Hash, Default)]
 pub struct Machine {
     /// Type of the machine and its associated MMU mode.
     pub machine_type: MachineType,

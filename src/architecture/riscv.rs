@@ -4,7 +4,7 @@ use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
 /// Represents a RISC-V CPU register associated with a value.
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Default, Hash, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq, Ord, PartialOrd)]
 pub struct CPURegister {
     pub value: u64,
 }
@@ -27,7 +27,7 @@ impl CPURegister {
 /// It holds the mapping between a virtual address of a page and the address of a physical frame.
 /// There is also auxiliary information about the page such as a present bit, a dirty or modified bit,
 /// address space or process ID information, amongst others.
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Hash, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, Ord, PartialOrd)]
 pub struct PageTableEntry {
     pub address: u64,
     pub flags: u64,
@@ -76,7 +76,7 @@ impl PageTableEntryTrait for PageTableEntry {
 /// Enumerates RISC-V MMU modes.
 /// The MMU modes are used to determine the number of bits used for virtual and physical addresses.
 /// The modes are named after the number of bits used for the virtual address space.
-#[derive(Debug, Clone, Copy, Serialize, Deserialize, Hash, Eq, PartialEq, Default)]
+#[derive(Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, Ord, PartialOrd, Default)]
 pub enum MMUMode {
     #[default]
     SV32,
@@ -85,7 +85,7 @@ pub enum MMUMode {
 }
 
 /// Represents a RISC-V CPU.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq, Ord, PartialOrd)]
 pub struct CPU {
     pub registers: Vec<CPURegister>,
 }
@@ -99,7 +99,7 @@ impl CPU {
 }
 
 /// Represents a RISC-V MMU.
-#[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq, Ord, PartialOrd)]
 pub struct MMU {
     pub mode: MMUMode,
 }
