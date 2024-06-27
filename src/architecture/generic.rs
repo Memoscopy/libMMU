@@ -32,7 +32,6 @@ impl MemoryRegion {
                 "Invalid memory region, start address is greater than or equal to end address"
             ));
         }
-
         Ok(Self {
             region_type,
             start_address,
@@ -157,14 +156,24 @@ impl Machine {
         memory_regions: MemorySpace,
         dumpfile: PathBuf,
         outfolder: PathBuf,
-    ) -> Self {
-        // TODO: Validate each field
-
-        Self {
+    ) -> Result<Self> {
+        // Check if the dump file exists
+        if !dumpfile.exists() {
+            return Err(anyhow::anyhow!("Dump file does not exist"));
+        }
+        // Check if the output folder exists
+        if !outfolder.exists() {
+            return Err(anyhow::anyhow!("Output folder does not exist"));
+        }
+        // Check if the output folder is empty
+        if outfolder.read_dir()?.next().is_some() {
+            return Err(anyhow::anyhow!("Output folder is not empty"));
+        }
+        Ok(Self {
             machine_type,
             memory_regions,
             dumpfile,
             outfolder,
-        }
+        })
     }
 }
