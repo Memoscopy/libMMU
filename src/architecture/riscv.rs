@@ -3,6 +3,11 @@ use super::generic::{CPURegister as CPURegisterTrait, PageTableEntry as PageTabl
 use anyhow::Result;
 use serde::{Deserialize, Serialize};
 
+/// Extracts bits from a 64-bit entry in little-endian order.
+fn extract_bits(entry: u64, pos: u64, n: u64) -> u64 {
+    (entry >> pos) & ((1 << n) - 1)
+}
+
 /// Represents a RISC-V CPU register associated with a value.
 #[derive(Debug, Clone, Serialize, Deserialize, Default, Hash, Eq, PartialEq, Ord, PartialOrd)]
 pub struct CPURegister {
@@ -33,13 +38,19 @@ pub struct PageTableEntry {
     pub flags: u64,
 }
 
+
+
 impl PageTableEntry {
     pub fn new(address: u64, flags: u64) -> Self {
         Self { address, flags }
     }
 
     pub fn is_supervisor(&self) -> bool {
-        todo!()
+        extract_bits(self.flags, 4, 1) == 0
+    }
+    
+    pub fn extract_addr(entry: u64) -> u64 {
+        extract_bits(entry, 10, 21) << 12
     }
 }
 
@@ -47,29 +58,28 @@ impl PageTableEntryTrait for PageTableEntry {
     type Address = u64;
     type Flags = u64;
 
-    // FIXME: Implement the following methods
     fn is_dirty(&self) -> bool {
-        todo!()
+        extract_bits(self.flags, 7, 1) != 0
     }
 
     fn is_accessed(&self) -> bool {
-        todo!()
+        extract_bits(self.flags, 6, 1) != 0
     }
 
     fn is_global(&self) -> bool {
-        todo!()
+        extract_bits(self.flags, 5, 1) != 0 
     }
 
     fn is_readable(&self) -> bool {
-        todo!()
+        extract_bits(self.flags, 1, 1) != 0
     }
 
     fn is_writable(&self) -> bool {
-        todo!()
+        extract_bits(self.flags, 2, 1) != 0
     }
 
     fn is_executable(&self) -> bool {
-        todo!()
+        extract_bits(self.flags, 3, 1) != 0
     }
 }
 
