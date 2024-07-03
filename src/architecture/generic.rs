@@ -104,6 +104,7 @@ pub trait CPURegister {
 pub trait PageTableEntry {
     type Address: hash::Hash + Eq + Default;
     type Flags: hash::Hash + Eq + Default;
+    type Size: hash::Hash + Eq + Default;
 
     fn is_dirty(&self) -> bool;
     fn is_accessed(&self) -> bool;

@@ -92,13 +92,13 @@ pub enum PTE64Size {
 /// There is also auxiliary information about the page such as a present bit, a dirty or modified bit,
 /// address space or process ID information, amongst others.
 #[derive(Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, Ord, PartialOrd, Default)]
-pub struct PageTableEntry32 {
-    pub address: u32,
-    pub flags: PTE32Flags,
-    pub size: PTE32Size,
+pub struct PageTableEntry<A, F, S> {
+    pub address: A,
+    pub flags: F,
+    pub size: S,
 }
 
-impl PageTableEntry32 {
+impl PageTableEntry<u32, PTE32Flags, PTE32Size> {
     pub fn new(address: u32, flags: u32, size: PTE32Size) -> Self {
         let flags = PTE32Flags(flags);
         Self {
@@ -113,9 +113,10 @@ impl PageTableEntry32 {
     }
 }
 
-impl PageTableEntryTrait for PageTableEntry32 {
+impl PageTableEntryTrait for PageTableEntry<u32, PTE32Flags, PTE32Size> {
     type Address = u32;
     type Flags = PTE32Flags;
+    type Size = PTE32Size;
 
     fn is_dirty(&self) -> bool {
         self.flags.dirty()
@@ -142,18 +143,7 @@ impl PageTableEntryTrait for PageTableEntry32 {
     }
 }
 
-/// Represents a RISC-V SV38 and SV48 page table entry.
-/// It holds the mapping between a virtual address of a page and the address of a physical frame.
-/// There is also auxiliary information about the page such as a present bit, a dirty or modified bit,
-/// address space or process ID information, amongst others.
-#[derive(Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, Ord, PartialOrd)]
-pub struct PageTableEntry64 {
-    pub address: u64,
-    pub flags: PTE64Flags,
-    pub size: PTE64Size,
-}
-
-impl PageTableEntry64 {
+impl PageTableEntry<u64, PTE64Flags, PTE64Size> {
     pub fn new(address: u64, flags: u64, size: PTE64Size) -> Self {
         let flags = PTE64Flags(flags);
         Self {
@@ -168,9 +158,10 @@ impl PageTableEntry64 {
     }
 }
 
-impl PageTableEntryTrait for PageTableEntry64 {
+impl PageTableEntryTrait for PageTableEntry<u64, PTE64Flags, PTE64Size> {
     type Address = u64;
     type Flags = PTE64Flags;
+    type Size = PTE64Size;
 
     fn is_dirty(&self) -> bool {
         self.flags.dirty()
@@ -196,6 +187,24 @@ impl PageTableEntryTrait for PageTableEntry64 {
         self.flags.exec()
     }
 }
+
+/// Represents a RISC-V page table.
+/// A page table is the data structure used by a virtual memory system in a computer operating system to store the mapping between virtual addresses and physical addresses.
+pub struct PageTable<A, F, S> {
+    /// Physical address of the page table
+    pub address: A,
+    /// Size of the page table
+    pub size: A,
+    /// Entries in the page table
+    pub entries: Vec<PageTableEntry<A, F, S>>,
+    /// Number of levels in the page table
+    pub levels: u8,
+}
+
+/// Represents a RISC-V SV32 page table.
+pub type PageTable32 = PageTable<u32, PTE32Flags, PTE32Size>;
+/// Represents a RISC-V SV39 and SV48 page table.
+pub type PageTable64 = PageTable<u64, PTE64Flags, PTE64Size>;
 
 /// Enumerates RISC-V MMU modes.
 /// The MMU modes are used to determine the number of bits used for virtual and physical addresses.
