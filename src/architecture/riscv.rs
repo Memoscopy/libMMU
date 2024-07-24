@@ -1,4 +1,6 @@
-use super::generic::{CPURegister as CPURegisterTrait, PageTableEntry as PageTableEntryTrait};
+use super::generic::{
+    CPURegister as CPURegisterTrait, PageTable, PageTableEntry, PageTableEntryTrait,
+};
 
 use anyhow::Result;
 use bitfield::bitfield;
@@ -14,6 +16,11 @@ impl CPURegisterTrait for CPURegister {
     type Value = u64;
 
     fn is_valid(&self) -> Result<u64> {
+        todo!()
+    }
+
+    #[allow(unused_variables)]
+    fn is_mmu_equivalent_to(&self, other: &Self) -> bool {
         todo!()
     }
 }
@@ -85,17 +92,6 @@ pub enum PTE64Size {
     /// 512GB, 64 * 8 bytes
     /// This is only available in Sv48
     PTE512GB,
-}
-
-/// Represents a RISC-V SV32 page table entry.
-/// It holds the mapping between a virtual address of a page and the address of a physical frame.
-/// There is also auxiliary information about the page such as a present bit, a dirty or modified bit,
-/// address space or process ID information, amongst others.
-#[derive(Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, Ord, PartialOrd, Default)]
-pub struct PageTableEntry<A, F, S> {
-    pub address: A,
-    pub flags: F,
-    pub size: S,
 }
 
 impl PageTableEntry<u32, PTE32Flags, PTE32Size> {
@@ -188,19 +184,6 @@ impl PageTableEntryTrait for PageTableEntry<u64, PTE64Flags, PTE64Size> {
     }
 }
 
-/// Represents a RISC-V page table.
-/// A page table is the data structure used by a virtual memory system in a computer operating system to store the mapping between virtual addresses and physical addresses.
-pub struct PageTable<A, F, S> {
-    /// Physical address of the page table
-    pub address: A,
-    /// Size of the page table
-    pub size: A,
-    /// Entries in the page table
-    pub entries: Vec<PageTableEntry<A, F, S>>,
-    /// Number of levels in the page table
-    pub levels: u8,
-}
-
 /// Represents a RISC-V SV32 page table.
 pub type PageTable32 = PageTable<u32, PTE32Flags, PTE32Size>;
 /// Represents a RISC-V SV39 and SV48 page table.
@@ -241,4 +224,9 @@ impl MMU {
     pub fn new(mode: MMUMode) -> Self {
         Self { mode }
     }
+}
+
+/// Represents a MMU that uses a radix tree.
+pub struct MMURadixTree32 {
+    pub nb_radix_levels: u8,
 }

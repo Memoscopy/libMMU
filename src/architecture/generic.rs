@@ -95,13 +95,14 @@ pub trait CPURegister {
     type Value: hash::Hash + Eq + Default;
 
     fn is_valid(&self) -> Result<Self::Value>;
+    fn is_mmu_equivalent_to(&self, other: &Self) -> bool;
 }
 
 /// Represents a page table entry with an address and flags.
 /// It holds the mapping between a virtual address of a page and the address of a physical frame.
 /// There is also auxiliary information about the page such as a present bit, a dirty or modified bit,
 /// address space or process ID information, amongst others.
-pub trait PageTableEntry {
+pub trait PageTableEntryTrait {
     type Address: hash::Hash + Eq + Default;
     type Flags: hash::Hash + Eq + Default;
     type Size: hash::Hash + Eq + Default;
@@ -118,10 +119,34 @@ pub trait PageTableEntry {
 /// It is a data structure used in a virtual memory system to manage the mapping between virtual addresses and physical addresses.
 /// It is used to translate virtual addresses to physical addresses and to manage the memory permissions of the pages.
 /// It is also used to store additional information about the pages, such as the status of the page, the address space or process ID, amongst others.
-pub trait PageTable {
-    type Entries: hash::Hash + Eq + Default + PageTableEntry;
+pub trait PageTableTrait {
+    type Entries: hash::Hash + Eq + Default + PageTableEntryTrait;
 
     // fn apply_on_entries(function: FnMut(PageTableEntry) -> Vec<?> ) -> ? // FIXME: to be defined, but is it necessary?
+}
+
+/// Represents a generic page table entry.
+/// It holds the mapping between a virtual address of a page and the address of a physical frame.
+/// There is also auxiliary information about the page such as a present bit, a dirty or modified bit,
+/// address space or process ID information, amongst others.
+#[derive(Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, Ord, PartialOrd, Default)]
+pub struct PageTableEntry<A, F, S> {
+    pub address: A,
+    pub flags: F,
+    pub size: S,
+}
+
+/// Represents a generic page table.
+/// A page table is the data structure used by a virtual memory system in a computer operating system to store the mapping between virtual addresses and physical addresses.
+pub struct PageTable<A, F, S> {
+    /// Physical address of the page table
+    pub address: A,
+    /// Size of the page table
+    pub size: A,
+    /// Entries in the page table
+    pub entries: Vec<PageTableEntry<A, F, S>>,
+    /// Number of levels in the page table
+    pub levels: u8,
 }
 
 /// Enumerates types of supported machines.
@@ -177,4 +202,19 @@ impl Machine {
             outfolder,
         })
     }
+
+    pub fn resolve_spaces(&mut self) -> Result<&mut Self> {
+        todo!()
+    }
+}
+
+pub trait MMU {
+    type Address: hash::Hash + Eq + Default;
+    type Flags: hash::Hash + Eq + Default;
+    type Size: hash::Hash + Eq + Default;
+
+    fn classify_entry(
+        &self,
+        entry: PageTableEntry<Address = Self::Address, Flags = Self::Flags, Size = Self::Size>,
+    ) -> Result<MemoryRegionType>;
 }
