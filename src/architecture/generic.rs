@@ -213,8 +213,10 @@ pub trait MMU {
     type Flags: hash::Hash + Eq + Default;
     type Size: hash::Hash + Eq + Default;
 
-    fn classify_entry(
+    fn classify_entry<
+        T: PageTableEntryTrait<Address = Self::Address, Flags = Self::Flags, Size = Self::Size>,
+    >(
         &self,
-        entry: PageTableEntry<Address = Self::Address, Flags = Self::Flags, Size = Self::Size>,
+        entry: T,
     ) -> Result<MemoryRegionType>;
 }
